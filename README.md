@@ -1,0 +1,40 @@
+# Mellow
+
+Mellow is a minimal desktop music player for Windows. Each music folder becomes a playlist, with tracks played directly from your files in a compact, fixed-size window.
+
+## Benefits
+
+- One folder, one playlist, with natural track ordering and instant search.
+- Windows 11 Acrylic transparency tinted by the current album artwork.
+- Gapless playback with a prepared track queue and decoder delay/padding trimming where supported by the audio file. Intentional silence in recordings is preserved.
+- Five-band equalizer: 60 Hz, 250 Hz, 1 kHz, 4 kHz and 12 kHz, with ±12 dB adjustment and Flat, Bass and Voice presets.
+- Automatic Windows audio-output switching, plus manual device selection.
+- Embedded artwork and metadata, shuffle, track or folder repeat, and saved preferences.
+- Local playback of MP3, FLAC, WAV, Ogg Vorbis, AAC/M4A and AIFF. No account required.
+
+## Controls
+
+| Action | Control |
+| --- | --- |
+| Add music folders | Folder-plus button, drag and drop, or `Ctrl+O` |
+| Switch playlists | Folder selector at the top |
+| Open the track list | List button at the bottom right |
+| Search the current folder | `Ctrl+F` |
+| Play or pause | Play button or `Space` |
+| Next / previous track | Transport buttons or `Ctrl+Right` / `Ctrl+Left` |
+| Seek by five seconds | `Right` / `Left` |
+| Seek to a position | Playback progress bar |
+| Adjust volume or mute | Volume slider or speaker button |
+| Shuffle / repeat | Transport controls |
+| Open the equalizer | `…` → Equalizer |
+| Choose an audio output | `…` → Audio output device |
+| Refresh a folder | `F5` or the `…` menu |
+| Remove a playlist | Folder context menu; music files stay on disk |
+| Return to the player | `Esc` or the music-note button |
+
+The interface currently uses Russian labels. Playback shortcuts apply when text fields and other controls do not have keyboard focus.
+
+## Stack
+
+Rust 2024 · eframe/egui · Windows DWM Acrylic · Segoe UI and Segoe Fluent Icons · Rodio/CPAL/WASAPI · Symphonia · RBJ biquad equalizer · Lofty · image · rfd · Serde/JSON.
+
