@@ -1,6 +1,6 @@
 [package]
 name = "mellow"
-version = "1.1.0"
+version = "1.2.0"
 edition = "2024"
 description = "Mellow — a minimal, folder-based desktop music player"
 license = "MIT"
