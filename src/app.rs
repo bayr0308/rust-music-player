@@ -15,14 +15,19 @@ use std::{
     time::{Duration, Instant},
 };
 
+mod settings_ui;
 mod ui;
 
 #[derive(Clone, Copy, PartialEq)]
 enum View {
     Player,
     Tracks,
+}
+
+#[derive(Clone, Copy, PartialEq)]
+enum SettingsTab {
+    Sound,
     Folders,
-    Equalizer,
 }
 
 enum Loaded {
@@ -34,12 +39,15 @@ enum Loaded {
     Folders(Vec<PathBuf>),
     Cover {
         path: PathBuf,
-        bytes: Option<Vec<u8>>,
+        image: Option<image::RgbaImage>,
     },
 }
 
 pub struct PlayerApp {
     view: View,
+    settings_open: bool,
+    settings_tab: SettingsTab,
+    output_devices: Result<Vec<String>, String>,
     acrylic: bool,
     preview_path: Option<PathBuf>,
     playlists: Vec<Playlist>,
@@ -108,6 +116,9 @@ impl PlayerApp {
             .or_else(|| (!playlists.is_empty()).then_some(0));
         let mut app = Self {
             view: View::Player,
+            settings_open: false,
+            settings_tab: SettingsTab::Folders,
+            output_devices: Ok(Vec::new()),
             acrylic: crate::window::acrylic(cc),
             preview_path: None,
             playlists,
@@ -274,28 +285,16 @@ impl PlayerApp {
                         self.add_folder(path, ctx);
                     }
                 }
-                Loaded::Cover { path, bytes } => {
+                Loaded::Cover { path, image } => {
                     if self.display_track().is_some_and(|t| t.path == path) {
-                        self.cover = bytes.and_then(|bytes| {
-                            let mut reader = image::ImageReader::new(std::io::Cursor::new(bytes))
-                                .with_guessed_format()
-                                .ok()?;
-                            let mut limits = image::Limits::default();
-                            limits.max_image_width = Some(8192);
-                            limits.max_image_height = Some(8192);
-                            reader.limits(limits);
-                            let image = reader
-                                .decode()
-                                .ok()?
-                                .resize_to_fill(600, 600, image::imageops::FilterType::Lanczos3)
-                                .to_rgba8();
+                        self.cover = image.map(|image| {
                             self.cover_tint = mellow::artwork::cover_tint(&image);
                             let size = [image.width() as usize, image.height() as usize];
-                            Some(ctx.load_texture(
+                            ctx.load_texture(
                                 "album-cover",
                                 ColorImage::from_rgba_unmultiplied(size, image.as_raw()),
                                 TextureOptions::LINEAR,
-                            ))
+                            )
                         });
                     }
                 }
@@ -390,8 +389,8 @@ impl PlayerApp {
         if let Some(path) = path {
             let (tx, ctx) = (self.tx.clone(), ctx.clone());
             std::thread::spawn(move || {
-                let bytes = library::cover_bytes(&path);
-                let _ = tx.send(Loaded::Cover { path, bytes });
+                let image = mellow::artwork::load_cover(&path);
+                let _ = tx.send(Loaded::Cover { path, image });
                 ctx.request_repaint();
             });
         }
@@ -501,9 +500,13 @@ impl PlayerApp {
     }
     fn keyboard(&mut self, ctx: &Context) {
         if ctx.input_mut(|i| i.consume_key(Modifiers::NONE, Key::Escape)) {
-            self.view = View::Player;
-            self.message = None;
-            ctx.memory_mut(|m| m.surrender_focus(Id::new("search")));
+            if Popup::is_any_open(ctx) {
+                Popup::close_all(ctx);
+            } else {
+                self.view = View::Player;
+                self.message = None;
+                ctx.memory_mut(|m| m.surrender_focus(Id::new("search")));
+            }
         }
         if ctx.input_mut(|i| i.consume_key(Modifiers::CTRL, Key::O)) {
             self.pick_folder(ctx);

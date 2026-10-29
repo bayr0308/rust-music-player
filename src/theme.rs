@@ -1,6 +1,9 @@
 use eframe::egui::{self, *};
 pub use egui_phosphor::regular as icons;
 
+mod fluent;
+pub use fluent::{fluent_menu_action, fluent_option, fluent_popup, fluent_select_button};
+
 pub const BG: Color32 = Color32::from_rgb(24, 30, 41);
 pub const SIDE: Color32 = Color32::from_rgb(31, 38, 50);
 pub const FG: Color32 = Color32::from_rgb(246, 248, 252);
@@ -129,6 +132,7 @@ pub fn icon(painter: &Painter, pos: Pos2, value: &str, size: f32, color: Color32
         icons::FOLDER_SIMPLE => "\u{E8B7}",
         icons::FOLDER_SIMPLE_PLUS => "\u{E8F4}",
         icons::CARET_DOWN => "\u{E70D}",
+        icons::CARET_UP => "\u{E70E}",
         icons::X => "\u{E8BB}",
         icons::MINUS => "\u{E921}",
         icons::SQUARE => "\u{E922}",
@@ -137,6 +141,7 @@ pub fn icon(painter: &Painter, pos: Pos2, value: &str, size: f32, color: Color32
         icons::DOTS_THREE => "\u{E712}",
         icons::MAGNIFYING_GLASS => "\u{E721}",
         icons::ARROWS_CLOCKWISE => "\u{E72C}",
+        icons::TRASH => "\u{E74D}",
         icons::ARROW_LEFT => "\u{E72B}",
         icons::CHECK => "\u{E73E}",
         icons::PLUS => "\u{E710}",
