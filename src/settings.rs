@@ -13,6 +13,7 @@ pub struct Settings {
     pub volume: f32,
     pub shuffle: bool,
     pub repeat: Repeat,
+    pub always_on_top: bool,
     pub output_device: Option<String>,
     pub equalizer: crate::equalizer::EqualizerSettings,
 }
@@ -24,6 +25,7 @@ impl Default for Settings {
             volume: 0.65,
             shuffle: false,
             repeat: Repeat::Off,
+            always_on_top: false,
             output_device: None,
             equalizer: Default::default(),
         }
@@ -70,6 +72,7 @@ mod tests {
         };
         settings.save(&path).unwrap();
         settings.volume = 0.24;
+        settings.always_on_top = true;
         settings.output_device = Some("Монитор / HDMI".into());
         settings.equalizer.enabled = true;
         settings.equalizer.gains = [4.0, 2.0, 0.0, -2.0, 1.0];
@@ -77,6 +80,7 @@ mod tests {
         let saved = Settings::load(&path).unwrap();
         assert_eq!(saved.folders, settings.folders);
         assert_eq!(saved.volume, 0.24);
+        assert!(saved.always_on_top);
         assert_eq!(saved.output_device, settings.output_device);
         assert_eq!(saved.equalizer, settings.equalizer);
         fs::write(&path, "not json").unwrap();
@@ -89,6 +93,7 @@ mod tests {
         let path = dir.path().join("settings.json");
         fs::write(&path, r#"{"volume":0.36,"folders":[]}"#).unwrap();
         let settings = Settings::load(&path).unwrap();
+        assert!(!settings.always_on_top);
         assert!(settings.output_device.is_none());
         assert!(!settings.equalizer.enabled);
         assert_eq!(settings.volume, 0.36);

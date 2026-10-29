@@ -1,3 +1,16 @@
+pub fn set_always_on_top(ctx: &eframe::egui::Context, enabled: bool) {
+    use eframe::egui::{ViewportCommand, ViewportId, WindowLevel};
+
+    ctx.send_viewport_cmd_to(
+        ViewportId::ROOT,
+        ViewportCommand::WindowLevel(if enabled {
+            WindowLevel::AlwaysOnTop
+        } else {
+            WindowLevel::Normal
+        }),
+    );
+}
+
 /// Ask Windows to compose real desktop acrylic behind the transparent framebuffer.
 /// A solid surface is used if the operating system does not support the material.
 #[cfg(windows)]

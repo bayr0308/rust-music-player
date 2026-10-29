@@ -123,6 +123,21 @@ impl PlayerApp {
                 self.scan(index, ctx);
                 ui.close();
             }
+            let pin_label = if self.settings.always_on_top {
+                "Открепить"
+            } else {
+                "Закрепить"
+            };
+            if fluent_menu_action(ui, pin_label)
+                .on_hover_text("Поверх других окон")
+                .clicked()
+            {
+                self.settings.always_on_top = !self.settings.always_on_top;
+                crate::window::set_always_on_top(ctx, self.settings.always_on_top);
+                self.changed();
+                ui.close();
+            }
+            ui.separator();
             if fluent_menu_action(ui, "Настройки").clicked() {
                 self.open_settings(SettingsTab::Folders, ctx);
                 ui.close();

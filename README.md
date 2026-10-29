@@ -6,6 +6,7 @@ Mellow is a minimal desktop music player for Windows. Each music folder becomes 
 
 - One folder, one playlist, with natural track ordering and instant search.
 - Windows 11 Acrylic transparency tinted by the current album artwork.
+- Pin the player above other windows; the setting is remembered between launches.
 - Gapless playback with a prepared track queue and decoder delay/padding trimming where supported by the audio file. Intentional silence in recordings is preserved.
 - Five-band equalizer: 60 Hz, 250 Hz, 1 kHz, 4 kHz and 12 kHz, with ±12 dB adjustment and Flat, Bass and Voice presets.
 - Automatic Windows audio-output switching, plus manual device selection.
@@ -18,6 +19,7 @@ Mellow is a minimal desktop music player for Windows. Each music folder becomes 
 | --- | --- |
 | Add music folders | Add in the folder dropdown or settings, folder-plus button, drag and drop, or `Ctrl+O` |
 | Switch playlists | Dropdown folder selector at the top |
+| Keep the player above other windows | `…` → Pin (Закрепить); choose Unpin (Открепить) to disable |
 | Open the track list | List button at the bottom right |
 | Search the current folder | `Ctrl+F` |
 | Play or pause | Play button or `Space` |

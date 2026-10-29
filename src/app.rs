@@ -143,6 +143,7 @@ impl PlayerApp {
             cover_tint: [32, 38, 50],
             preload_blocked: None,
         };
+        crate::window::set_always_on_top(&cc.egui_ctx, app.settings.always_on_top);
         app.audio.set_equalizer(app.settings.equalizer.clone());
         for index in 0..app.playlists.len() {
             app.scan(index, &cc.egui_ctx);
